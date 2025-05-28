@@ -9,7 +9,7 @@ if os.path.exists(readme_path):
         long_description = fh.read()
 
 setup(
-    name="tinytoken",
+    name="tinytoken-sdk",
     version="0.1.0",
     author="TinyToken",
     author_email="elliot@norrevik.se",
