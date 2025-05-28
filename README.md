@@ -14,12 +14,12 @@ pip install tinytoken-sdk
 import tinytoken
 
 # Compress text
-result = tinytoken.compress("Your text here", 0.8, "your-api-key")
+result = tinytoken.compress("Your text here", "your-api-key")
 print(result)
 
 # Or use the class
 client = tinytoken.TinyToken("your-api-key")
-result = client.compress("Your text here", 0.8)
+result = client.compress("Your text here")
 print(result)
 ```
 

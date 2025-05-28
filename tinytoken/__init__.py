@@ -14,16 +14,17 @@ class TinyToken:
     def __init__(self, api_key: str):
         self.api_key = api_key
     
-    def compress(self, text: str, quality: float) -> str:
-        return compress(text, quality, self.api_key)
+    def compress(self, text: str, api_key: str = None, quality: float = None) -> str:
+        return compress(text, api_key or self.api_key, quality)
 
-def compress(text: str, quality: float, api_key: str) -> str:
+def compress(text: str, api_key: str, quality: float = None) -> str:
     """
     Compress text using the TinyToken API.
     
     Args:
         text: Text to compress (required)
         api_key: API key for authentication (required)
+        quality: Compression quality (optional)
     
     Returns:
         Compressed text as string
@@ -35,6 +36,11 @@ def compress(text: str, quality: float, api_key: str) -> str:
     if not isinstance(api_key, str) or not api_key.strip():
         raise TinyTokenError("API key must be a non-empty string")
     
+    # Build the request payload
+    payload = {"text": text}
+    if quality is not None:
+        payload["quality"] = quality
+    
     try:
         response = requests.post(
             "https://api.tinytoken.org/compress",
@@ -42,10 +48,7 @@ def compress(text: str, quality: float, api_key: str) -> str:
                 "Authorization": f"Bearer {api_key}",
                 "Content-Type": "application/json"
             },
-            json={
-                "text": text,
-                "quality": quality
-            },
+            json=payload,
             timeout=30
         )
         
