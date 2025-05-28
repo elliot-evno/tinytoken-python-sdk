@@ -17,10 +17,6 @@ import tinytoken
 result = tinytoken.compress("Your text here")
 print(result)
 
-# With optional quality parameter
-result = tinytoken.compress("Your text here", 0.97)
-print(result)
-
 # Or use the class
 client = tinytoken.TinyToken()
 result = client.compress("Your text here")
