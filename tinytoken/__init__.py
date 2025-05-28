@@ -2,7 +2,7 @@
 
 import requests
 
-__version__ = "0.1.1"
+__version__ = "0.1.2"
 __all__ = ["compress", "TinyTokenError"]
 
 
@@ -11,19 +11,19 @@ class TinyTokenError(Exception):
     pass
 
 class TinyToken:
-    def __init__(self, api_key: str):
+    def __init__(self, api_key: str = None):
         self.api_key = api_key
     
     def compress(self, text: str, api_key: str = None, quality: float = None) -> str:
         return compress(text, api_key or self.api_key, quality)
 
-def compress(text: str, api_key: str, quality: float = None) -> str:
+def compress(text: str, api_key: str = None, quality: float = None) -> str:
     """
     Compress text using the TinyToken API.
     
     Args:
         text: Text to compress (required)
-        api_key: API key for authentication (required)
+        api_key: API key for authentication (optional)
         quality: Compression quality (optional)
     
     Returns:
@@ -33,8 +33,10 @@ def compress(text: str, api_key: str, quality: float = None) -> str:
         TinyTokenError: For any API errors
     """
     
-    if not isinstance(api_key, str) or not api_key.strip():
-        raise TinyTokenError("API key must be a non-empty string")
+    # Build headers
+    headers = {"Content-Type": "application/json"}
+    if api_key and api_key.strip():
+        headers["Authorization"] = f"Bearer {api_key}"
     
     # Build the request payload
     payload = {"text": text}
@@ -44,10 +46,7 @@ def compress(text: str, api_key: str, quality: float = None) -> str:
     try:
         response = requests.post(
             "https://api.tinytoken.org/compress",
-            headers={
-                "Authorization": f"Bearer {api_key}",
-                "Content-Type": "application/json"
-            },
+            headers=headers,
             json=payload,
             timeout=30
         )

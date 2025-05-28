@@ -10,7 +10,7 @@ if os.path.exists(readme_path):
 
 setup(
     name="tinytoken-sdk",
-    version="0.1.1",
+    version="0.1.2",
     author="TinyToken",
     author_email="elliot@norrevik.se",
     description="Python SDK for TinyToken API",
