@@ -11,19 +11,21 @@ class TinyTokenError(Exception):
     pass
 
 class TinyToken:
-    def __init__(self, api_key: str = None):
+    def __init__(self, api_key: str):
+        if not api_key or not api_key.strip():
+            raise TinyTokenError("API key is required")
         self.api_key = api_key
     
-    def compress(self, text: str, api_key: str = None, quality: float = None) -> str:
-        return compress(text, api_key or self.api_key, quality)
+    def compress(self, text: str, quality: float = None) -> str:
+        return compress(text, self.api_key, quality)
 
-def compress(text: str, api_key: str = None, quality: float = None) -> str:
+def compress(text: str, api_key: str, quality: float = None) -> str:
     """
     Compress text using the TinyToken API.
     
     Args:
         text: Text to compress (required)
-        api_key: API key for authentication (optional)
+        api_key: API key for authentication (required)
         quality: Compression quality (optional)
     
     Returns:
@@ -33,10 +35,15 @@ def compress(text: str, api_key: str = None, quality: float = None) -> str:
         TinyTokenError: For any API errors
     """
     
+    # Validate required parameters
+    if not api_key or not api_key.strip():
+        raise TinyTokenError("API key is required")
+    
     # Build headers
-    headers = {"Content-Type": "application/json"}
-    if api_key and api_key.strip():
-        headers["Authorization"] = f"Bearer {api_key}"
+    headers = {
+        "Content-Type": "application/json",
+        "Authorization": f"Bearer {api_key}"
+    }
     
     # Build the request payload
     payload = {"text": text}
